@@ -1,8 +1,7 @@
-# ZQ-TgWebhook · Webhook → Telegram 通知转发器
+# ZQ-TgWebhook 
 
 部署在 **Cloudflare Workers** 上的通用 webhook 接收器,把任意来源的事件通知自动转发到 Telegram 聊天 / 群 / 频道。零服务器、零成本、全球边缘节点加速。
 
-项目名称:`ZQ-TgWebhook`。
 
 ---
 
@@ -241,53 +240,6 @@ curl -X POST https://<YOUR_DOMAIN>/ \
 
 ---
 
-## 八、Telegram 消息样式
 
-发 JSON:
-```json
-{ "event": "订单通知", "order_id": "#20260828-042", "amount": "¥128.00", "status": "已支付" }
-```
 
-Telegram 收到:
-```
-🔔 Webhook 通知
-🕒 2026-08-28 11:00:06 UTC
-📡 来源: 1.2.3.4
 
-📦 数据:
-{
-  "event": "订单通知",
-  "order_id": "#20260828-042",
-  "amount": "¥128.00",
-  "status": "已支付"
-}
-```
-
----
-
-## 九、安全建议
-
-- `TG_BOT_TOKEN` 与 `WEBHOOK_SECRET` 一定用 **Secret / 密钥** 类型保存,不要用明文「文本」类型
-- 建议每 3~6 个月轮换一次 `WEBHOOK_SECRET`
-- 如需严格限制来源,在 Cloudflare 侧叠加 **WAF 规则**(只允许特定 IP 段 / ASN / Region 访问)
-- Bot 不要加入无关群;频道里给机器人管理员权限时,只开「发送消息」即可,别给多余权限
-- 对接的第三方平台里,优先用请求头传 secret,次选用 URL 参数
-
----
-
-## 十、可扩展方向
-
-需要以下能力可以在 `_worker.js` 基础上扩展:
-
-- 特定服务格式化模板(GitHub / GitLab / 支付回调 / UptimeRobot 等)
-- 多 Chat ID 分发(按事件类型或关键字路由到不同群)
-- 消息去重(Cloudflare KV 存近期消息指纹)
-- 失败自动重试(Cloudflare Queues)
-- HMAC 签名校验(对接 `X-Flare-Signature` / `X-Hub-Signature-256` 类平台)
-- 多个 `WEBHOOK_SECRET` 共存,按密钥分租户
-
----
-
-## 许可证
-
-MIT
